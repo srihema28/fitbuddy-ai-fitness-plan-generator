@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>FitBuddy AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', path='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <div class="logo">
+        FitBuddy
+    </div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+    </nav>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Your AI Fitness
+            <span>Buddy</span>
+        </h1>
+
+        <p>
+            Generate personalized 7-day workout plans
+            using Gemini AI.
+        </p>
+
+        <a href="#generator"
+           class="hero-button">
+
+            Create My Plan
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= GENERATOR ================= -->
+
+<section id="generator"
+         class="generator-section">
+
+    <div class="container">
+
+        <h2>
+            Generate Your Fitness Plan
+        </h2>
+
+        <p class="section-description">
+            Enter your details and let FitBuddy create
+            a personalized fitness routine.
+        </p>
+
+
+        <form action="/generate"
+              method="post"
+              class="fitness-form">
+
+
+            <div class="form-group">
+
+                <label>
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter your name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Age
+                </label>
+
+                <input
+                    type="number"
+                    name="age"
+                    min="10"
+                    max="100"
+                    placeholder="Enter age"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Weight (kg)
+                </label>
+
+                <input
+                    type="number"
+                    name="weight"
+                    step="0.1"
+                    placeholder="Enter weight"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Fitness Goal
+                </label>
+
+                <select name="goal"
+                        required>
+
+                    <option value="">
+                        Select Goal
+                    </option>
+
+                    <option value="Weight Loss">
+                        Weight Loss
+                    </option>
+
+                    <option value="Muscle Gain">
+                        Muscle Gain
+                    </option>
+
+                    <option value="General Fitness">
+                        General Fitness
+                    </option>
+
+                    <option value="Strength">
+                        Strength
+                    </option>
+
+                    <option value="Flexibility">
+                        Flexibility
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Workout Intensity
+                </label>
+
+                <select name="intensity"
+                        required>
+
+                    <option value="">
+                        Select Intensity
+                    </option>
+
+                    <option value="Low">
+                        Low
+                    </option>
+
+                    <option value="Medium">
+                        Medium
+                    </option>
+
+                    <option value="High">
+                        High
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button type="submit">
+
+                Generate My Plan
+
+            </button>
+
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- ================= RESULT ================= -->
+
+{% if result %}
+
+<section class="result-section">
+
+    <div class="container">
+
+        <div class="result-card">
+
+            <h2>
+                Hello {{ result.name }} 👋
+            </h2>
+
+            <div class="user-info">
+
+                <span>
+                    Age: {{ result.age }}
+                </span>
+
+                <span>
+                    Weight: {{ result.weight }} kg
+                </span>
+
+                <span>
+                    Goal: {{ result.goal }}
+                </span>
+
+                <span>
+                    Intensity: {{ result.intensity }}
+                </span>
+
+            </div>
+
+
+            <h3>
+                🏋️ Your 7-Day Fitness Plan
+            </h3>
+
+            <div class="plan">
+
+                {{ result.plan }}
+
+            </div>
+
+
+            <div class="nutrition-card">
+
+                <h3>
+                    🥗 Nutrition & Recovery Tip
+                </h3>
+
+                <p>
+                    {{ result.nutrition }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= FEEDBACK ================= -->
+
+        <div class="feedback-card">
+
+            <h2>
+                Improve Your Plan
+            </h2>
+
+            <p>
+                Tell FitBuddy what you want to change.
+            </p>
+
+
+            <form id="feedbackForm">
+
+                <textarea
+                    name="feedback"
+                    id="feedback"
+                    placeholder="Example: More cardio and more rest days..."
+                    required></textarea>
+
+                <button type="submit">
+                    Regenerate Plan
+                </button>
+
+            </form>
+
+
+            <div id="updatedPlan"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- ================= FEATURES ================= -->
+
+<section id="features"
+         class="features">
+
+    <div class="container">
+
+        <h2>
+            FitBuddy Features
+        </h2>
+
+
+        <div class="feature-grid">
+
+
+            <div class="feature-card">
+
+                <div class="icon">
+                    🏋️
+                </div>
+
+                <h3>
+                    AI Workout Plans
+                </h3>
+
+                <p>
+                    Generate personalized 7-day
+                    workout routines.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">
+                    🥗
+                </div>
+
+                <h3>
+                    Nutrition Tips
+                </h3>
+
+                <p>
+                    Get simple nutrition and
+                    recovery suggestions.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">
+                    🤖
+                </div>
+
+                <h3>
+                    Gemini AI
+                </h3>
+
+                <p>
+                    Powered by Google's Gemini
+                    generative AI models.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">
+                    🔄
+                </div>
+
+                <h3>
+                    AI Feedback
+                </h3>
+
+                <p>
+                    Improve your fitness plan
+                    using user feedback.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ABOUT ================= -->
+
+<section id="about"
+         class="about">
+
+    <div class="container">
+
+        <h2>
+            About FitBuddy
+        </h2>
+
+        <p>
+
+            FitBuddy is an AI-powered fitness
+            application that generates personalized
+            workout plans based on user goals,
+            weight, age and workout intensity.
+
+            The system uses FastAPI, Gemini AI,
+            SQLite and a simple web interface.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 FitBuddy – AI Fitness Plan Generator
+    </p>
+
+</footer>
+
+
+<script>
+
+const feedbackForm =
+    document.getElementById("feedbackForm");
+
+
+if (feedbackForm) {
+
+    feedbackForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const feedback =
+                document.getElementById("feedback").value;
+
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "feedback",
+                feedback
+            );
+
+
+            const response =
+                await fetch(
+                    "/feedback",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            const output =
+                document.getElementById(
+                    "updatedPlan"
+                );
+
+
+            if (data.success) {
+
+                output.innerHTML = `
+                    <div class="updated-plan">
+                        <h3>✨ Updated AI Plan</h3>
+                        <p>${data.updated_plan}</p>
+                    </div>
+                `;
+
+            } else {
+
+                output.innerHTML = `
+                    <p>
+                        Error generating updated plan.
+                    </p>
+                `;
+
+            }
+
+        }
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
